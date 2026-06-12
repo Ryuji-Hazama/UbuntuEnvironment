@@ -113,17 +113,25 @@ set default=0
 search --no-floppy --fs-uuid --set=isopart YOUR-UUID-HERE
 
 menuentry "Ubuntu Desktop 24.04" {
-    set isofile="/ubuntu-24.04.4-desktop-amd64.iso"
-    loopback loop ($isopart)$isofile
-    linux (loop)/casper/vmlinuz boot=casper iso-scan/filename=$isofile quiet splash
-    initrd (loop)/casper/initrd
+        set isofile="/iso/ubuntu-24.04.4-desktop-amd64.iso"
+        set iso_path="$isofile"
+        export iso_path
+        immod tpm
+        search --set=root --file "$isofile"
+        loopback loop_desktop $isofile
+        set root=(loop_desktop)
+        configfile /boot/grub/loopback.cfg
 }
 
 menuentry "Ubuntu Server 24.04" {
-    set isofile="/ubuntu-24.04.4-live-server-amd64.iso"
-    loopback loop ($isopart)$isofile
-    linux (loop)/casper/vmlinuz boot=casper iso-scan/filename=$isofile quiet splash
-    initrd (loop)/casper/initrd
+        set isofile="/iso/ubuntu-24.04.4-live-server-amd64.iso"
+        set iso_path="$isofile"
+        export iso_path
+        immod tpm
+        search --set=root --file "$isofile"
+        loopback loop_server $isofile
+        set root=(loop_server)
+        configfile /boot/grub/loopback.cfg
 }
 
 menuentry "Restart System" {
@@ -134,6 +142,17 @@ menuentry "Shut down" {
     halt
 }
 ```
+
+#### `grub.cfg`, `loopback.cfg` inside ISO
+
+The `loopback.cfg` or sometimes `grub.cfg` inside the ISO file is the configuration file for the bootloader inside the ISO. The file paths may vary depending on the ISO. To find the correct path, you can mount the ISO file and explore its contents.
+
+```bash
+mkdir -p /mnt/iso
+mount -o loop /path/to/iso/file.iso /mnt/iso
+```
+
+The you can find the configuration file inside the mounted ISO using `find` or something like that.
 
 ### Store ISO files
 
