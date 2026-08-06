@@ -169,7 +169,8 @@ git branch
 ### Create a new branch and switch
 
 ```bash
-git switch -c <branch_name>
+git checkout -b <branch_name>
+
 git add .
 git commit -m "Initializing a new branch"
 
