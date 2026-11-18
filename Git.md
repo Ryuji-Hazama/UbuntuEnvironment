@@ -419,3 +419,80 @@ git commit -m "Commit message"
 # Push to remote
 git push origin <target-branch>
 ```
+
+## Multiple Branches
+
+When you are working as a team and each member has their own branch, it is important to keep your branches up to date with the latest changes from the main/master branch to avoid conflicts and ensure smooth integration.
+
+When the main/master branch is updated, you have two options to update your personal branches:
+
+- Rebase your personal branch onto the main/master branch.
+- Merge the main/master branch into your personal branch.
+
+Before updating your personal branch, make sure your local main/master branch is up to date with the remote repository.
+
+```bash
+# Switch to main/master branch
+git checkout <main/master>
+
+# Pull the latest changes from the remote repository
+git pull origin <main/master>
+```
+
+### Rebase
+
+If the branch you are working on has been developed only by you, and you want a clean, linear history, you can rebase your personal branch onto the main/master branch.
+
+```bash
+# Switch to your personal branch
+git checkout <personal-branch>
+
+# Rebase onto the main/master branch
+git rebase <main/master>
+
+# Push the rebased branch to the remote repository
+git push origin <personal-branch> --force-with-lease
+```
+
+Your git graph will look like:
+
+```text
+  o   Rebase onto main development branch
+  |
+  o
+  |\
+  | o Your old commit
+  o |
+ /| |
+o | | Other member's commit
+| | |
+```
+
+### Merge
+
+If you prefer not to rewrite history, or if your branch has been developed by multiple people, you can merge the main/master branch into your personal branch.
+
+```bash
+# Switch to your personal branch
+git checkout <personal-branch>
+
+# Merge the main/master branch into your personal branch
+git merge <main/master> [--no-ff]
+
+# Push the merged branch to the remote repository
+git push origin <personal-branch>
+```
+
+Now, your git graph will look like:
+
+```text
+    o Merge main into your branch
+   /|
+  o |
+  |\|
+  | o Your old commit
+  o |
+ /| |
+o | | Other member's commit
+| | |
+```
