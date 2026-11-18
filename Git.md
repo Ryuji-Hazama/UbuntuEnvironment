@@ -109,6 +109,109 @@ To add all files in a directory, you can specify the directory name instead of t
 git add .
 ```
 
+## Nested Repositories
+
+You can have nested Git repositories, also known as submodules. This allows you to include one Git repository inside another.
+
+### Add a submodule
+
+```bash
+git submodule add <repository-url> [<path-to-submodule>]
+```
+
+### Update submodules
+
+```bash
+git submodule update --remote --merge
+```
+
+### Create and add a new submodule
+
+```bash
+# Create a new repository under the parent repository directory
+mkdir <submodule-directory>
+cd <submodule-directory>
+git init
+
+# Set remote and push initial commit
+git remote add origin <repository-url>
+git add .
+git commit -m "Initial commit"
+git push -u origin master
+
+# Add the submodule to the parent repository
+cd ..
+git submodule add <repository-url> <submodule-directory>
+```
+
+### Clone submodules
+
+#### If the parent repository is cloned (which has empty submodule directories)
+
+```bash
+git submodule update --init --recursive
+```
+
+#### Clone the parent repository with submodules
+
+```bash
+git clone --recurse-submodules <repository-url>
+```
+
+### Remove a submodule
+
+```bash
+git submodule deinit -f <submodule-directory>
+git rm -f <submodule-directory>
+rm -rf .git/modules/<submodule-directory>
+```
+
+## Stash Changes
+
+You can temporarily save your changes without committing them using the `stash` command.
+
+```bash
+git stash
+```
+
+To apply the stashed changes later, use:
+
+```bash
+git stash apply
+```
+
+To apply the stashed changes and remove them from the stash list, use:
+
+```bash
+git stash pop
+```
+
+You can also list all stashed changes using:
+
+```bash
+git stash list
+```
+
+If the stash list contains multiple entries, you can apply a specific stash using:
+
+```bash
+git stash apply stash@{n}
+```
+where `n` is the index of the stash in the list.
+
+If you no longer need a stashed change and want to remove it from the stash list without applying it, you can drop it using:
+
+```bash
+git stash drop [stash@{n}]
+```
+where `n` is the index of the stash in the list, and if you omit it, the most recent stash will be dropped.
+
+If you want to clear all stashed changes, you can use:
+
+```bash
+git stash clear
+```
+
 ## Commit Changes
 
 ```bash
@@ -169,7 +272,10 @@ git branch
 ### Create a new branch and switch
 
 ```bash
-git checkout -b <branch_name>
+git switch -c <branch_name>
+
+# or checkout the branch
+# git checkout -b <branch_name>
 
 git add .
 git commit -m "Initializing a new branch"
