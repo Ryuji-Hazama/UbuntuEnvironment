@@ -85,6 +85,8 @@ network:
 
 ## Preparing for SSH Certificate Authentication
 
+[More Information](SSH.md)
+
 ### Generating a key
 
 On the Host, run the following command to generate a key pair for SSH certificate authentication.

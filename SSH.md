@@ -38,28 +38,50 @@ sudo ufw status
 sudo ufw allow 22
 ```
 
-## Use Certificatio File
+## Use Certification File
 
-### Generate Certification key pare
+### Generate Certification key pair
 
 ```bash
 ssh-keygen -t rsa
 ```
 
-This command will generate a key pare (default: `~/.ssh/id_rsa` and `~/.ssh/id_rsa.pub`)
+This command will generate a key pair (default: `~/.ssh/id_rsa` and `~/.ssh/id_rsa.pub`)
 
-Private key file (the file without `.pub` extention) should never leave your computer.
+Private key file (the file without `.pub` extension) should never leave your computer.
 
 Set strong password for your future!!
 
 ### Set Public Key to Server
 
-1. Copy the contents inside the public key (a file with `.pub` extention)
-2. Save the contents to the file `~/.ssh/authorozed_keys` as a new line.
+1. Copy the contents inside the public key (a file with `.pub` extension)
+2. Save the contents to the file `~/.ssh/authorized_keys` as a new line.
+
+Or you can use the `ssh-copy-id` command to copy your public key to the server if you have SSH access.
+
+```bash
+ssh-copy-id user_name@host_name
+
+# or specify the identity file explicitly
+# ssh user_name@host_name -i /path/to/identity/file
+```
 
 ### Disable Password Authentication
 
-Uncomment or create and set `PasswordAuthentication no`
+Uncomment and edit or add configurations below in the SSH server configuration file: `/etc/ssh/sshd_config`
+
+```text
+PasswordAuthentication no
+ChallengeResponseAuthentication no
+UsePAM no
+```
+
+Test the SSH server configuration and restart the service after making changes.
+
+```bash
+sudo sshd -t
+sudo systemctl restart ssh
+```
 
 ## Proxy Jump
 
